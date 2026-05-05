@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NattDev Link (PRO)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-green-400">
+
+<!-- HEADER -->
+<header class="p-5 border-b border-gray-800 flex justify-between items-center">
+  <h1 class="text-2xl font-bold">NattDev Link</h1>
+  <div>
+    <button onclick="login()" class="bg-green-500 text-black px-4 py-2 rounded-xl mr-2">Login</button>
+    <button onclick="openUpgrade()" class="bg-yellow-400 text-black px-4 py-2 rounded-xl">Upgrade</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="p-6 grid gap-6">
+
+<!-- CREATE LINK -->
+<div class="bg-gray-900 p-5 rounded-2xl">
+  <h2 class="text-xl mb-3">สร้างลิงก์</h2>
+
+  <textarea id="text" placeholder="ใส่ข้อความ" class="w-full p-3 rounded bg-black mb-3"></textarea>
+  <input type="file" id="file" class="mb-3" />
+  <input type="text" id="category" placeholder="หมวด เช่น งาน / ขายของ" class="w-full p-3 rounded bg-black mb-3" />
+
+  <button onclick="createLink()" class="bg-green-500 text-black px-5 py-2 rounded-xl">สร้างลิงก์</button>
+  <p id="result" class="mt-3"></p>
+</div>
+
+<!-- SUBSCRIPTION -->
+<div class="bg-gray-900 p-5 rounded-2xl">
+  <h2 class="text-xl mb-3">สถานะสมาชิก</h2>
+  <p id="plan">Plan: Free</p>
+  <p id="expire">Expire: -</p>
+</div>
+
+<!-- LINKS -->
+<div class="bg-gray-900 p-5 rounded-2xl">
+  <h2 class="text-xl mb-3">ลิงก์ของฉัน</h2>
+  <div id="links" class="grid gap-2"></div>
+</div>
+
+<!-- BIO LINK -->
+<div class="bg-gray-900 p-5 rounded-2xl">
+  <h2 class="text-xl mb-3">Bio Page</h2>
+  <input id="bioName" placeholder="username" class="p-2 bg-black rounded w-full mb-2" />
+  <button onclick="generateBio()" class="bg-green-500 text-black px-4 py-2 rounded-xl">สร้าง Bio Link</button>
+  <p id="bioResult" class="mt-2"></p>
+</div>
+
+</main>
+
+<!-- ADMIN -->
+<div class="fixed bottom-5 right-5">
+  <button onclick="adminLogin()" class="bg-red-500 px-4 py-2 rounded-xl">Admin</button>
+</div>
+
+<script>
+let token = "demo-token";
+let userPlan = "Free";
+
+function login(){
+  alert("Login สำเร็จ (Demo)");
+  loadSubscription();
+}
+
+async function createLink(){
+  const text = document.getElementById("text").value;
+  const category = document.getElementById("category").value;
+
+  const code = Math.random().toString(36).substring(2,8);
+  const url = "https://nattdev.app/" + code;
+
+  document.getElementById("result").innerText = url;
+
+  const el = document.createElement("div");
+  el.className = "bg-black p-3 rounded";
+  el.innerText = category + " | " + url;
+
+  document.getElementById("links").appendChild(el);
+}
+
+function loadSubscription(){
+  document.getElementById("plan").innerText = "Plan: " + userPlan;
+  document.getElementById("expire").innerText = "Expire: 30 วัน";
+}
+
+function openUpgrade(){
+  const choice = confirm("สมัคร Pro 99 บาท?");
+  if(choice){
+    alert("โอนเงินไปที่บัญชีที่แอดมินกำหนด แล้วอัปโหลดสลิป");
+  }
+}
+
+function generateBio(){
+  const name = document.getElementById("bioName").value;
+  document.getElementById("bioResult").innerText = "https://nattdev.app/" + name;
+}
+
+function adminLogin(){
+  const pass = prompt("ใส่รหัสแอดมิน");
+
+  if(pass === "1669"){
+    adminPanel();
+  } else {
+    alert("รหัสผิด");
+  }
+}
+
+function adminPanel(){
+  const menu = prompt("1=เพิ่มบัญชี | 2=อนุมัติ Pro");
+
+  if(menu == "1"){
+    const bank = prompt("เลขบัญชีใหม่");
+    alert("เพิ่มแล้ว: " + bank);
+  }
+
+  if(menu == "2"){
+    userPlan = "Pro";
+    loadSubscription();
+    alert("อัปเกรดผู้ใช้เป็น Pro แล้ว");
+  }
+}
+
+</script>
+
+</body>
+</html>
